@@ -16,22 +16,63 @@ Learning topics with random notes and observations.
 
 Traits are very similar to `C# interfaces` but much more versatile and powerful. For example, it's possible to use `dependency injection` techniques from OOP.
 
+Here is an example based on 2 different logging mechanisms.
+
+> One restriction to note is that we can implement a trait on a type only if at least one of the trait, or the type is local to our crate [[1]](#1)
+ 
 ```rust
+trait LogParse {
+    fn parse_me(&self) -> String;
+}
+
+
+#[derive(Debug)]
+struct DbLogger {
+    log: String,
+    stamp: String,
+    db: String,
+}
+
 #[derive(Debug)]
 struct StdoutLogger {
     log: String,
     stamp: String,
 }
+
+impl LogParse for DbLogger {
+    fn parse_me(&self) -> String {
+        format!("Log {}, logged at {}, with db engine {}", self.log, self.stamp, self.db)
+    }
+}
+
+impl LogParse for StdoutLogger {
+    fn parse_me(&self) -> String {
+        format!("Log {}, logged at {}", self.log, self.stamp)
+    }
+}
+
 fn main() {
+    let dber = DbLogger {
+        log: String::from("aaa"),
+        stamp: String::from("2022-10-28"),
+        db: String::from("mysql"),
+    };
+
     let structer = StdoutLogger {
         log: String::from("aaa"),
         stamp: String::from("2022-10-28"),
     };
-    println!("Structre: {:?}", structer)
+
+   println!("Log parsed {}", structer.parse_me());
+   println!("Log parsed {}", dber.parse_me());
 }
 ```
 
-*Results:* `Structre: StdoutLogger { log: "aaa", stamp: "2022-10-28" }`
+*Results:*
+```
+Log parsed Log aaa, logged at 2022-10-28
+Log parsed Log aaa, logged at 2022-10-28, with db engine mysql
+```
 
 ### ? Operator
 
@@ -231,4 +272,4 @@ The user with preference None gets Red
 
 ## Reference
 
-<a id="1" href="https://doc.rust-lang.org/book/ch03-03-how-functions-work.html#:~:text=if%20you%20add%20a%20semicolon%20to%20the%20end%20of%20an%20expression%2C%20you%20turn%20it%20into%20a%20statement%2C%20and%20it%20will%20then%20not%20return%20a%20value">[1]</a>
+<a id="1" href="https://doc.rust-lang.org/book/ch10-02-traits.html#:~:text=one%20restriction%20to%20note%20is%20that%20we%20can%20implement%20a%20trait%20on%20a%20type%20only%20if%20at%20least%20one%20of%20the%20trait%20or%20the%20type%20is%20local%20to%20our%20crate">[1]</a> : Trait restrictions to crate
