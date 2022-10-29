@@ -2,15 +2,21 @@
 
 Exercises based on https://doc.rust-lang.org/book/ 
 
+---
+
 ## How to run the examples
 
 Evaluate code snippets inline using [neovim](https://neovim.io/) with the [mdeval plugin](https://github.com/gpanders/vim-medieval).
 
 Using FeMaco creates an editing floating window with `rust-tools` LSP attached and Treesitter attached.
 
+---
+
 ## Topics
 
 Learning topics with random notes and observations.
+
+---
 
 ### Traits
 
@@ -24,27 +30,20 @@ Here is an example based on 2 different logging mechanisms.
 trait LogParse {
     fn parse_me(&self) -> String;
 }
-
-
-#[derive(Debug)]
 struct DbLogger {
     log: String,
     stamp: String,
     db: String,
 }
-
-#[derive(Debug)]
 struct StdoutLogger {
     log: String,
     stamp: String,
 }
-
 impl LogParse for DbLogger {
     fn parse_me(&self) -> String {
         format!("Log {}, logged at {}, with db engine {}", self.log, self.stamp, self.db)
     }
 }
-
 impl LogParse for StdoutLogger {
     fn parse_me(&self) -> String {
         format!("Log {}, logged at {}", self.log, self.stamp)
@@ -74,9 +73,61 @@ Log parsed Log aaa, logged at 2022-10-28
 Log parsed Log aaa, logged at 2022-10-28, with db engine mysql
 ```
 
+---
+
+#### Default implementation
+
+This is very similar to `C# abstract classes`
+
+```rust
+pub trait Summary {
+    // This does not have a default implementation
+    // it will need to be provided
+    fn summarize_author(&self) -> String;
+
+    fn summarize(&self) -> String {
+        format!(
+            "This is a summary of the writing of {}",
+            self.summarize_author()
+        )
+    }
+}
+
+struct Article {
+    text: String,
+    length: u32,
+    author: String,
+}
+
+impl Summary for Article {
+    fn summarize_author(&self) -> String {
+        format!("@{}", self.author)
+    }
+    fn summarize(&self) -> String {
+        format!("New implementation {}", self.text)
+    }
+}
+
+fn main() {
+    let blog = Article {
+        text: String::from("sample text"),
+        author: String::from("John Cleese"),
+        length: 234,
+    };
+
+    println!("Summary: {}", blog.summarize());
+}
+```
+
+*Results:* `Summary: New implementation sample text`
+
+---
+
 ### ? Operator
 
 ? Will return the error value from the current function for the caller to handle.
+
+---
 
 ### Struct Constructors
 
@@ -107,6 +158,8 @@ fn main() {
 
 *Results:* `query: arg1, file_path: arg2`
 
+---
+
 ### Reading input
 
 Reading command line input arguments
@@ -123,12 +176,13 @@ fn main() {
 
 *Results:*
 ```
-/tmp/mdeval//READMEmd_52_60.sh: line 7: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')
-   Compiling rust-exercises v0.1.0 (/home/decoder/dev/learning-repos/rust-exercises)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.37s
+/tmp/mdeval//READMEmd_176_184.sh: line 7: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')
+    Finished dev [unoptimized + debuginfo] target(s) in 0.24s
      Running `target/debug/rust-exercises arg1 arg2`
 Hello World!
 ```
+
+---
 
 ### Higher Order Functions
 
@@ -153,6 +207,8 @@ fn main() {
 
 *Results:* `functional style: 165`
 
+
+---
 
 ### Statements & Expressions
 
@@ -202,6 +258,8 @@ error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0308`.
 ```
+
+---
 
 ### Closures
 
@@ -266,9 +324,13 @@ The user with preference Some(Red) gets Red
 The user with preference None gets Red
 ```
 
+---
+
 ## Links & Resources
 
 - [Rust in examples](https://doc.rust-lang.org/rust-by-example/index.html)
+
+---
 
 ## Reference
 
