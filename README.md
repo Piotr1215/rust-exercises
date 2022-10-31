@@ -18,6 +18,42 @@ Learning topics with random notes and observations.
 
 ---
 
+### Errors
+
+Simple example with returning an error arm of the result type based on the passed in option.
+Here the caller needs to handle the result type.
+
+```rust
+use std::io::{Error, ErrorKind};
+
+pub fn file_handler(inp: Option<&str>) -> Result<String, Error> {
+    let custom_error = Error::new(ErrorKind::Other, "och no");
+
+    match inp {
+        Some(c) => Ok(c.to_string()),
+        None => Err(custom_error),
+    }
+}
+
+fn main(){
+        let costam = None;
+        let res = file_handler(costam);
+        println!("Result: {:?}", res);
+
+        let costam = Some("hi there");
+        let res = file_handler(costam);
+        println!("Result: {:?}", res);
+}
+```
+
+*Results:*
+```
+Result: Err(Custom { kind: Other, error: "och no" })
+Result: Ok("hi there")
+```
+
+---
+
 ### Traits
 
 Traits are very similar to `C# interfaces` but much more versatile and powerful. For example, it's possible to use `dependency injection` techniques from OOP.
