@@ -161,7 +161,7 @@ fn main() {
 
 ### ? Operator
 
-? Will return the error value from the current function for the caller to handle.
+[?](https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html?highlight=Error%20propagation#where-the--operator-can-be-used) Will return the error value from the current function for the caller to handle.
 
 ---
 
