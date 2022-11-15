@@ -18,6 +18,21 @@ Learning topics with random notes and observations.
 
 ---
 
+### Raw strings
+
+[Raw string](https://doc.rust-lang.org/reference/tokens.html#raw-string-literals) literals
+
+> do not process any escapes
+
+This is useful in regex expressions.
+
+```rust
+
+```
+
+
+---
+
 ### Errors
 
 Simple example with returning an error arm of the result type based on the passed in option.
