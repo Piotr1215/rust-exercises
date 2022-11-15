@@ -27,9 +27,96 @@ Learning topics with random notes and observations.
 This is useful in regex expressions.
 
 ```rust
-
+    let regex = Regex::new("opacity: (.*)").unwrap();
 ```
 
+---
+
+### Common Collections
+
+Vectors - allow to store values only of the SAME type. Here is vector of `string slice`
+
+```rust
+fn main() {
+    let cities: Vec<&str> = vec!["Frankfurt", "London", "New York"];
+    for c in cities.iter() {
+        println!("City: {}", c);
+    }
+}
+```
+
+*Results:*
+```
+City: Frankfurt
+City: London
+City: New York
+```
+
+---
+
+#### Pattern matching on vector count
+
+```rust
+fn main() {
+    let names: Vec<&str> = vec!["John", "Susanne", "Judy", "Reginald"];
+
+    let len = names.len();
+
+    match len {
+        1 => println!("One element"),
+        2 | 3 => println!("Two or three elements"),
+        _ => println!("Probably more elements"),
+    }
+
+}
+```
+
+*Results:* `Probably more elements`
+
+---
+
+#### Indexing
+
+> Collections are 0-index based
+
+Indexing into a non-existing element will cause `panic`.
+
+```rust
+fn main() {
+    let names: Vec<&str> = vec!["John", "Susanne", "Judy", "Reginald"];
+
+    let fist = &names[9];
+    println!("First element is: {}", fist);
+
+}
+```
+
+*Results:*
+```
+thread 'main' panicked at 'index out of bounds: the len is 4 but the index is 9', /tmp/mdeval//READMEmd_78_86.rs:4:17
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+```
+
+---
+
+#### Accessing with Option monad
+
+Using the `get` function will return `Option` monad that needs to be matched.
+
+```rust
+fn main() {
+    let names: Vec<&str> = vec!["John", "Susanne", "Judy", "Reginald"];
+
+    let first = names.get(9);
+    match first {
+        Some(name) => println!("Name found: {}", name),
+        None => println!("Name not found"),
+    }
+
+}
+```
+
+*Results:* `Name not found`
 
 ---
 
