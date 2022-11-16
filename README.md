@@ -18,6 +18,65 @@ Learning topics with random notes and observations.
 
 ---
 
+### Ownership
+
+
+- Each value in Rust has an owner. 
+- There can only be one owner at a time.
+- When the owner goes out of scope, the value will be dropped.
+
+#### Out of Scope
+
+```rust
+fn main() {
+    // Ownership
+
+    let v = "this is valid for whole function";
+
+    {
+        let s = "this is valid only in this code block";
+    }
+
+    println!("Variable s: {}, variable v: {}", s, v); // This will not compile, variable s is out of scope
+}
+```
+
+*Results:*
+```
+error[E0425]: cannot find value `s` in this scope
+  --> temp.rs:10:48
+   |
+10 |     println!("Variable s: {}, variable v: {}", s, v); // This will not compile, variable s is out of scope
+   |                                                ^ help: a local variable with a similar name exists: `v`
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0425`.
+```
+
+#### In Scope
+
+```rust
+fn main() {
+    let v = "this is valid for whole function";
+
+    {
+        let s = "this is valid only in this code block";
+        println!("{s}"); 
+    }
+
+    println!("{v}"); 
+}
+```
+
+*Results:*
+```
+this is valid only in this code block
+this is valid for whole function
+```
+
+---
+
 ### Raw strings
 
 [Raw string](https://doc.rust-lang.org/reference/tokens.html#raw-string-literals) literals
