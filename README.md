@@ -20,10 +20,15 @@ Learning topics with random notes and observations.
 
 ### Ownership
 
+Ownership rules: 
 
 - Each value in Rust has an owner. 
 - There can only be one owner at a time.
 - When the owner goes out of scope, the value will be dropped.
+
+Before I could understand the concept of borrowing, I had to understand the idea of `moving`.
+
+> Moving is transferring the ownership of a `value` from one variable or function to another.
 
 #### Out of Scope
 
@@ -53,6 +58,57 @@ error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0425`.
 ```
+
+---
+
+### Reference
+
+Reference is like a pointer, but always points to the right value for the lifetime of the variable.
+
+```rust
+fn main() {
+    let s1 = String::from("This is a sample string");
+    let len = calculate_length(&s1);
+
+    println!("The length of {s1} is {len}");
+
+}
+
+fn calculate_length(s1: &str) -> usize {
+    s1.len()
+}
+```
+
+*Results:*
+```
+warning: unreachable statement
+ --> temp.rs:8:5
+  |
+5 |         todo!()
+  |         ------- any code following this expression is unreachable
+...
+8 |     println!("The length of {s1} is {len}");
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+  |
+  = note: `#[warn(unreachable_code)]` on by default
+  = note: this warning originates in the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: `()` doesn't implement `std::fmt::Display`
+ --> temp.rs:8:38
+  |
+8 |     println!("The length of {s1} is {len}");
+  |                                      ^^^ `()` cannot be formatted with the default formatter
+  |
+  = help: the trait `std::fmt::Display` is not implemented for `()`
+  = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+  = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: aborting due to previous error; 1 warning emitted
+
+For more information about this error, try `rustc --explain E0277`.
+```
+
+---
 
 #### In Scope
 
