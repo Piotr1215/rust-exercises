@@ -18,6 +18,92 @@ Learning topics with random notes and observations.
 
 ---
 
+### Algebraic data types
+
+`Rust` has a powerful algebraic type system, it is easy to construct reach domains with it.
+
+```rust
+#![allow(unused)]
+type CheckNumber = u32;
+type CardNumber = String;
+
+enum CardType {
+    Visa,
+    Mastercard,
+}
+
+#[derive(Debug)]
+struct CreditInfo(CheckNumber, CardNumber);
+
+#[derive(Debug)]
+enum PaymentMethod {
+    Cash,
+    Check(CheckNumber),
+    Card(CreditInfo),
+}
+
+type PaymentAmount = f32;
+#[derive(Debug)]
+enum Currency {
+    Eur,
+    Usd,
+}
+
+#[derive(Debug)]
+struct Payment {
+    amount: PaymentAmount,
+    currency: Currency,
+    method: PaymentMethod,
+}
+
+trait PrintDetails {
+    fn payment_info(&self) -> String;
+}
+
+impl PrintDetails for Payment {
+    fn payment_info(&self) -> String {
+        let method = match &self.method {
+            PaymentMethod::Cash => String::from("cash"),
+            PaymentMethod::Check(c) => format!("a check with number {:?}", c),
+            PaymentMethod::Card(c) => format!("a check {} with a credit card {}", c.0, c.1),
+        };
+
+        format!(
+            "An amount of {}, was paid in {:?}, using {}",
+            &self.amount, &self.currency, method
+        )
+    }
+}
+
+fn main() {
+    let cc_payment = Payment {
+        amount: 100.33,
+        currency: Currency::Usd,
+        method: PaymentMethod::Card(CreditInfo(122, String::from("452389798712097"))),
+    };
+
+    let check_payment = Payment {
+        amount: 0.33,
+        currency: Currency::Eur,
+        method: PaymentMethod::Check(42),
+    };
+
+    println!("Payment details \n {}", check_payment.payment_info());
+    println!("Payment details \n {}", cc_payment.payment_info());
+}
+```
+
+*Results:*
+```
+Payment details 
+ An amount of 0.33, was paid in Eur, using a check with number 42
+Payment details 
+ An amount of 100.33, was paid in Usd, using a check 122 with a credit card 452389798712097
+```
+
+
+---
+
 ### Ownership
 
 Ownership rules: 
@@ -64,13 +150,14 @@ For more information about this error, try `rustc --explain E0425`.
 ### Reference
 
 Reference is like a pointer, but always points to the right value for the lifetime of the variable.
+There can only be one mutable reference.
 
 ```rust
 fn main() {
     let s1 = String::from("This is a sample string");
     let len = calculate_length(&s1);
 
-    println!("The length of {s1} is {len}");
+    println!(r#"The length of {s1} is {len}"#);
 
 }
 
@@ -79,34 +166,7 @@ fn calculate_length(s1: &str) -> usize {
 }
 ```
 
-*Results:*
-```
-warning: unreachable statement
- --> temp.rs:8:5
-  |
-5 |         todo!()
-  |         ------- any code following this expression is unreachable
-...
-8 |     println!("The length of {s1} is {len}");
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
-  |
-  = note: `#[warn(unreachable_code)]` on by default
-  = note: this warning originates in the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
-
-error[E0277]: `()` doesn't implement `std::fmt::Display`
- --> temp.rs:8:38
-  |
-8 |     println!("The length of {s1} is {len}");
-  |                                      ^^^ `()` cannot be formatted with the default formatter
-  |
-  = help: the trait `std::fmt::Display` is not implemented for `()`
-  = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
-  = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
-
-error: aborting due to previous error; 1 warning emitted
-
-For more information about this error, try `rustc --explain E0277`.
-```
+*Results:* `The length of This is a sample string is 23`
 
 ---
 
