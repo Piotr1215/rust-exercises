@@ -18,6 +18,42 @@ Learning topics with random notes and observations.
 
 ---
 
+### Println macro
+
+```rust
+#[derive(Debug)]
+struct Konverted {
+    name: String,
+    age: u32,
+    surname: String,
+}
+
+fn main() {
+    println!("I'm just a rust code puppet");
+
+    let x= "smostamoka";
+
+    println!("I'm {x}");
+
+    let komo = Konverted {
+        name: String::from("Konvertura"),
+        age: 22,
+        surname: String::from("localhost"),
+    };
+
+    println!("here it is {:?}", komo);
+}
+```
+
+*Results:*
+```
+I'm just a rust code puppet
+I'm smostamoka
+here it is Konverted { name: "Konvertura", age: 22, surname: "localhost" }
+```
+
+---
+
 ### Algebraic data types
 
 `Rust` has a powerful algebraic type system, it is easy to construct reach domains with it.
